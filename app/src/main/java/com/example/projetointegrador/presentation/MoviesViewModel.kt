@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.projetointegrador.data.database.InfosDB
 import com.example.projetointegrador.data.model.*
 import com.example.projetointegrador.data.repository.Favorites
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,6 +17,9 @@ class MoviesViewModel(private val error: ErrorListener? = null) : ViewModel() {
 
     private val _moviesLiveData = MutableLiveData<MutableList<Infos>>(mutableListOf())
     val moviesLiveData: LiveData<MutableList<Infos>> = _moviesLiveData
+
+    private val _moviesLiveDataDB = MutableLiveData<MutableList<InfosDB>>(mutableListOf())
+    val moviesLiveDataDB: LiveData<MutableList<Infos>> = _moviesLiveData
 
     private val _releaseDateLiveData = MutableLiveData<ReleaseDatesResponse>()
     val releaseDateLiveData: LiveData<ReleaseDatesResponse> = _releaseDateLiveData
@@ -45,7 +49,7 @@ class MoviesViewModel(private val error: ErrorListener? = null) : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({
                 favorites.setList(it.results)
-                _moviesLiveData.value = favorites.listFavoritesMovies()
+                _moviesLiveDataDB.value = favorites.listFavoritesMovies()
             },{
             error?.pageError()
             })
@@ -159,7 +163,7 @@ class MoviesViewModel(private val error: ErrorListener? = null) : ViewModel() {
 
     fun getFavoriteMovies() {
         val favoritesData = favorites.listFavoritesMovies().filter { it.favoriteCheck }
-        _favoriteMoviesLiveData.value = favoritesData as MutableList<Infos>
+        _favoriteMoviesLiveData.value = favoritesData as MutableList<InfosDB>
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

@@ -2,11 +2,16 @@ package com.example.projetointegrador.data.repository
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.projetointegrador.data.database.DatabaseBuilder
+import com.example.projetointegrador.data.database.InfosDB
+import com.example.projetointegrador.data.database.MoviesDao
 import com.example.projetointegrador.data.model.Infos
 
 class Favorites {
 
    @RequiresApi(Build.VERSION_CODES.N)
+
+   val moviesBuilder = DatabaseBuilder()
 
    fun setList(movies: MutableList<Infos>) {
        favoritesList.addAll(movies)
@@ -27,8 +32,8 @@ class Favorites {
         favoritesList[index] = favoritesList[index].copy(favoriteCheck = false)
     }
 
-    fun listFavoritesMovies(): MutableList<Infos> {
-        return favoritesList
+    fun listFavoritesMovies(): MutableList<InfosDB> {
+        return DatabaseBuilder.dataBase?.moviesDao()!!.getFavoritesMoviesDB()
     }
 
     private companion object {
